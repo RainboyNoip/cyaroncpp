@@ -6,6 +6,7 @@ project(nyx)
 
 # 指定编译flag
 set(CMAKE_CXX_FLAGS "-std=c++17")
+set(CMAKE_CXX_FLAGS "-g")
 
 # 设置宏
 add_definitions(-D DEBUG)
