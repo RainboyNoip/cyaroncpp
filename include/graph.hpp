@@ -43,11 +43,15 @@ public:
                 }
             }
         }
+        void operator++(int){ ++*this; }
 
         __LINE__TYPE::value_type& operator*(){
             return *iter;
         }
 
+        friend bool operator==(const Iterator & __a,const Iterator & __b){
+            return !operator==(__a,__b);
+        }
         friend bool operator!=(const Iterator & __a,const Iterator & __b){
             return __a.iter != __b.iter;
         }
@@ -73,7 +77,6 @@ public:
         __add_edge(u,v,w);
         if( !directed && u != v) 
             __add_edge(v,u,w);
-
     }
 
     Iterator begin(){
@@ -89,7 +92,13 @@ public:
         return Iterator(point_count, edges[point_count].end(),this);
     }
 
+    //得到边的数量
     auto edges_size(){ return edges_count; }
+
+    //把回以点u为超点的所有边
+    const __LINE__TYPE & edges_by_head(unsigned int u) const{
+        return edges[u];
+    }
 
 private:
     void __add_edge(int u,int v,int w=0){
