@@ -50,6 +50,25 @@ public:
         argument& operator=(argument const&) = delete;
         argument& operator=(argument&&) = delete;
     };
+
+    //使用std::pair 作为类型
+    struct argument_two_args{
+        template<typename UnderlyingType>
+        NamedType operator=(std::initializer_list<UnderlyingType>&& __list) const {
+            if(__list.size() != 2 ){
+                throw  std::invalid_argument("给定的参数数量不对,必须有两个参数, 例如: word_length_range = {1,2} \n");
+            }
+            return NamedType(std::make_pair(
+                        *__list.begin(),
+                        *(__list.begin()+1)
+                        ));
+        }
+
+        template<typename UnderlyingType>
+        NamedType operator=(std::pair<UnderlyingType,UnderlyingType>&& __mp) const {
+            return NamedType(std::forward<std::pair<unsigned int, unsigned int>>(__mp));
+        }
+    };
 private:
     T value_;
 };
@@ -57,6 +76,59 @@ private:
 #define MAKE__NamedType(__name__,__type__) \
 using __name__##Type = NamedType<__type__, struct __##__name__##Tag>;\
 static const __name__##Type::argument __name__;
+
+#define MAKE__NamedType_TWO(__name__,__type__) \
+using __name__##Type = NamedType<std::pair<__type__,__type__>, struct __##__name__##Tag>;\
+static const __name__##Type::argument_two_args __name__;
+
+//得到tuple 里类型的对应类型值
+template<typename __getType,typename T>
+auto __pick(T & __tuple) -> decltype(std::declval<__getType>().get()){
+    return std::get<__getType>(__tuple).get();
+}
+
+template <typename T1, typename... T2>
+constexpr bool is_tuple_has_type(std::tuple<T2...>) {
+  return std::disjunction_v<std::is_same<T1, T2>...>;
+}
+
+//得到__NamedType 存储的真正的值的类型
+template<typename __getType>
+using NamedType_contained_type = std::remove_reference_t<decltype(std::declval<__getType>().get())>;
+
+//进一步封装
+// 得到对应类值的值，或，默认值
+template<
+    typename __getType,
+    typename... Args
+>
+auto __pick_or_default(
+        std::tuple<Args...> & __tuple, //参数1
+        NamedType_contained_type<__getType>&& default_Ret_Value //参数2 默认值
+        ) -> NamedType_contained_type<__getType> //返回引用
+{
+    using __RetType = NamedType_contained_type<__getType>;
+    if constexpr (__has_type<__getType, Args...>::value)
+        return std::get<__getType>(__tuple).get();
+    else
+        return std::forward<__RetType>(default_Ret_Value);
+}
+
+//template<
+    //typename __getType,
+    //typename _Tuple
+//>
+//auto ___pick_or_default(
+        //_Tuple& __tuple, //参数1
+        //NamedType_contained_type<__getType>&& default_Ret_Value //参数2 默认值
+        //){
+    //using __RetType = NamedType_contained_type<__getType>;
+    //if constexpr (is_tuple_has_type<__getType>(__tuple))
+        //return std::get<__getType>(__tuple).get();
+    //else
+        //return std::forward<__RetType>(default_Ret_Value);
+//}
+
 
 
 } //namespace cyaron

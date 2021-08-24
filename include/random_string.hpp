@@ -18,21 +18,22 @@ MAKE__NamedType(first_letter_uppercase,bool)
 
 //word_length_range = {1,2}         or
 //word_length_range =  std::make_pair(1, 2);
-using  word_length_range_Type = NamedType<std::pair<unsigned int,unsigned int>, struct __word_length_range>;
-static const struct {
-    word_length_range_Type operator=(std::initializer_list<unsigned int>&& __list) const {
-        if(__list.size() != 2 ){
-            throw  std::invalid_argument("word_length_range 给定的参数数量不对,必须有两个参数, 例如: word_length_range = {1,2} \n");
-        }
-        return word_length_range_Type(std::make_pair(
-                    *__list.begin(),
-                    *(__list.begin()+1)
-                    ));
-    }
-    word_length_range_Type operator=(std::pair<unsigned int, unsigned int>&& __mp) const {
-        return word_length_range_Type(std::forward<std::pair<unsigned int, unsigned int>>(__mp));
-    }
-} word_length_range;
+MAKE__NamedType_TWO(word_length_range, unsigned int)
+//using  word_length_range_Type = NamedType<std::pair<unsigned int,unsigned int>, struct __word_length_range>;
+//static const struct {
+    //word_length_range_Type operator=(std::initializer_list<unsigned int>&& __list) const {
+        //if(__list.size() != 2 ){
+            //throw  std::invalid_argument("word_length_range 给定的参数数量不对,必须有两个参数, 例如: word_length_range = {1,2} \n");
+        //}
+        //return word_length_range_Type(std::make_pair(
+                    //*__list.begin(),
+                    //*(__list.begin()+1)
+                    //));
+    //}
+    //word_length_range_Type operator=(std::pair<unsigned int, unsigned int>&& __mp) const {
+        //return word_length_range_Type(std::forward<std::pair<unsigned int, unsigned int>>(__mp));
+    //}
+//} word_length_range;
 
 struct String {
 
@@ -112,8 +113,8 @@ struct String {
         if constexpr (__has_type<first_letter_uppercaseType, std::remove_reference_t<Args>... >::value)
             _M_first_letter_uppercase = __pick<first_letter_uppercaseType>(__args_tuple);
 
-        if constexpr (__has_type<word_length_range_Type, std::remove_reference_t<Args>... >::value )
-            _M_word_length_range = __pick<word_length_range_Type>(__args_tuple);
+        if constexpr (__has_type<word_length_rangeType, std::remove_reference_t<Args>... >::value )
+            _M_word_length_range = __pick<word_length_rangeType>(__args_tuple);
 
         unsigned int __count = RND(l,r);
 
@@ -161,11 +162,6 @@ struct String {
         return "";
     }
 
-private:
-    template<typename __getType,typename T>
-    static  auto __pick(T & __tuple) -> decltype(std::declval<__getType>().get()){
-        return std::get<__getType>(__tuple).get();
-    }
 };
 
 //template<>
