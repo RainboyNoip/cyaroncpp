@@ -24,7 +24,7 @@ int main(){
     }
     std::cout << "====tree========" << std::endl;
     auto mytree = graph::tree(10,
-            directed = true,
+            //directed = true,
             chain = 0.2,
             flower = 0.3,
             weight_limit = {1,10}
@@ -41,6 +41,13 @@ int main(){
     //for( auto it =t.begin() ;  it != end; ++it ){
         //std::cout << 1 << std::endl;
     //}
+    std::cout << "====binary_tree========" << std::endl;
+    auto btree = graph::binary_tree(10,
+            left = 0.2,
+            right= 0.7,
+            weight_limit = {1,10}
+            );
+    std::cout << btree << std::endl;
 
     return 0;
 }

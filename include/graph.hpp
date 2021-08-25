@@ -205,7 +205,7 @@ graph graph::tree(int point_count,Args... args){
     double _L_chain  = __pick_or_default<chainType>(__args_tuple,0.0);
     double _L_flower = __pick_or_default<flowerType>(__args_tuple,0.0);
     std::pair<int, int> _L_weight_limit
-        = __pick_or_default<weight_limitType>(__args_tuple,std::make_pair(3,8));
+        = __pick_or_default<weight_limitType>(__args_tuple,std::make_pair(1,1));
 
     //debug
     //std::cout << _L_directed << std::endl;
@@ -240,6 +240,53 @@ graph graph::tree(int point_count,Args... args){
         __tg.add_edge(u, i,RND(_L_weight_limit.first ,_L_weight_limit.second ));
     }
 
+    return __tg;
+}
+
+template<typename... Args>
+graph graph::binary_tree(int point_count,Args... args){
+    if(point_count <=0)
+        throw  std::invalid_argument("point_count must greater than 0!");
+    
+    auto __args_tuple = std::make_tuple(std::forward<Args>(args)...);
+
+    double _L_left  = __pick_or_default<leftType>(__args_tuple,0.0);
+    double _L_right = __pick_or_default<rightType>(__args_tuple,0.0);
+    std::pair<int, int> _L_weight_limit
+        = __pick_or_default<weight_limitType>(__args_tuple,std::make_pair(1,1));
+
+    if( _L_left < 0 || _L_left > 1 || _L_right < 0 || _L_right > 1){
+        throw  std::invalid_argument("left and right must be between 0 and 1");
+    }
+    if ( _L_left + _L_right > 1)
+        throw  std::invalid_argument("left plus right must be smaller than 1");
+    
+    std::set<unsigned int> can_left{1};
+    std::set<unsigned int> can_right{1};
+
+    graph __tg(point_count,true); //
+    for(int i=2;i<=point_count;++i){
+        double edge_pos = RND.random();
+        //left
+        int node = 0;
+        if( edge_pos < _L_left || 
+            ( _L_left + _L_right < edge_pos  && edge_pos <= (1.0-_L_left - _L_right)/2 ) 
+          ){ 
+            auto it = can_left.begin();
+            std::advance(it,RND(0,can_left.size()-1));
+            node = *it;
+            can_left.erase(it);
+        }
+        else { // right
+            auto it = can_right.begin();
+            std::advance(it,RND(0,can_right.size()-1));
+            node = *it;
+            can_right.erase(it);
+        }
+        __tg.add_edge(node, i);
+        can_left.insert(i);
+        can_right.insert(i);
+    }
     return __tg;
 }
 
