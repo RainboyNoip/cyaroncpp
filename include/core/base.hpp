@@ -8,6 +8,7 @@
 #include <iostream>
 #include <tuple>
 #include <vector>
+#include <list>
 #include <sstream>
 
 
