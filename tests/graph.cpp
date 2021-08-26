@@ -3,7 +3,7 @@
 
 int main(){
     using namespace cyaron;
-    graph g(5,1);
+    Graph g(5,1);
     g.add_edge(1, 2);
     g.add_edge(1, 3);
     g.add_edge(1, 4);
@@ -23,7 +23,7 @@ int main(){
         std::cout << x <<" "<< y << std::endl;
     }
     std::cout << "====tree========" << std::endl;
-    auto mytree = graph::tree(10,
+    auto mytree = Graph::tree(10,
             //directed = true,
             chain = 0.2,
             flower = 0.3,
@@ -42,12 +42,19 @@ int main(){
         //std::cout << 1 << std::endl;
     //}
     std::cout << "====binary_tree========" << std::endl;
-    auto btree = graph::binary_tree(10,
+    auto btree = Graph::binary_tree(10,
             left = 0.2,
             right= 0.7,
             weight_limit = {1,10}
             );
     std::cout << btree << std::endl;
+
+    std::cout << "====graph========" << std::endl;
+    auto mygraph = Graph::graph(10, 14,
+            repeated_edges = false
+            );
+    std::cout << mygraph << std::endl;
+
 
     return 0;
 }

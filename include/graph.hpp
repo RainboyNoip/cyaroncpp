@@ -12,6 +12,8 @@ MAKE__NamedType(flower,double)
 MAKE__NamedType(left,double)
 MAKE__NamedType(right,double)
 MAKE__NamedType(directed,bool)
+MAKE__NamedType(self_loop,bool)
+MAKE__NamedType(repeated_edges,bool)
 MAKE__NamedType_TWO(weight_limit,int)
 
 //TODO std::function<int(int,int)>
@@ -42,7 +44,7 @@ struct __edge {
 
 };
 
-struct graph {
+struct Graph {
 
 private:
 
@@ -54,7 +56,7 @@ public:
     struct Iterator_for_common_head {
         Iterator_for_common_head() = delete;
         explicit
-        Iterator_for_common_head(const unsigned int head_num,graph const * THIS_pg):
+        Iterator_for_common_head(const unsigned int head_num,Graph const * THIS_pg):
             _M_pg{THIS_pg},_M_edge_idx{THIS_pg->head[head_num]}
         {}
         Iterator_for_common_head& begin() {
@@ -76,29 +78,32 @@ public:
         }
     private:
         unsigned int _M_edge_idx;
-        graph const  * _M_pg;
+        Graph const  * _M_pg;
 
     };
 
     struct Iterator_all {
         using CIter = std::vector<__edge>::const_iterator;
         Iterator_all() = delete;
-        Iterator_all(const CIter& iter)
-            :iter{iter}
+        Iterator_all(const CIter& iter, Graph const * __graph )
+            :iter{iter},_M_pg{__graph}
         {};
         bool operator!=(const CIter& __end) const{ return iter != __end; }
-        void operator++(){ iter++; }
-        void operator++(int){ iter++; }
+        void operator++(){ ++iter; 
+            if( !_M_pg->directed && *this != _M_pg->end())
+                ++iter;
+        }
+        void operator++(int){ ++*this; }
 
         auto operator*() ->__edge::__edge_thin
         { return  __edge::get(*iter); }
     private:
         CIter iter;
-        graph const  * _M_pg;
+        Graph const  * _M_pg;
     };
 
-    graph() = delete;
-    graph(unsigned int point_count,bool directed = false)
+    Graph() = delete;
+    Graph(unsigned int point_count,bool directed = false)
         : directed{directed} ,_M_point_count{point_count}
     {
         head.resize(point_count+1,__End_Sentiel); //设置大小，所有的元素为-1
@@ -117,7 +122,7 @@ public:
 
     auto begin() const
         -> Iterator_all {
-        return Iterator_all(edges.begin());
+        return Iterator_all(edges.begin(),this);
     }
 
     //auto begin() {
@@ -136,16 +141,14 @@ public:
     // TODO 有向图 与 无向图的输出不一样
     // 有向图 所有边都输出
     // 无向图 只输出一次边
-    friend std::ostream& operator<<(std::ostream& __out,const graph& __tg) {
+    friend std::ostream& operator<<(std::ostream& __out,const Graph& __tg) {
         if( __tg._M_with_head)
             __out << __tg.point_count() << ' ' << __tg.edges_size() << '\n';
-        bool flag = 0;
         for (const auto& e : __tg) {
             auto [u,v,w] = e;
             __out << u << ' ' << v;
             if( __tg._M_with_weight ) __out << ' ' << w;
             __out << '\n';
-            if( !__tg.directed && (flag=!flag) ) continue;
         }
         return __out;
     }
@@ -162,10 +165,17 @@ public:
     
     // static
     template<typename... Args>
-    static graph tree(int point_count,Args... args);
+    static Graph tree(int point_count,Args... args);
 
     template<typename... Args>
-    static graph binary_tree(int point_count,Args... args);
+    static Graph binary_tree(int point_count,Args... args);
+
+    template<typename... Args>
+    static Graph graph(int point_count,int edge_count,Args... args);
+
+    //保证连通的图,且限定edge_count的范围
+    template<typename... Args>
+    static Graph graph_connected(int point_count,int edge_count,Args... args);
     // static end
 
 private:
@@ -192,7 +202,7 @@ private:
 };
 
 template<typename... Args>
-graph graph::tree(int point_count,Args... args){
+Graph Graph::tree(int point_count,Args... args){
     if(point_count <=0)
         throw  std::invalid_argument("point_count must greater than 0!");
     
@@ -219,7 +229,7 @@ graph graph::tree(int point_count,Args... args){
     if( _L_chain + _L_flower > 1)
         throw  std::invalid_argument("chain plus flower must be smaller than 1!");
     
-    graph __tg(point_count,true); //
+    Graph __tg(point_count,true); //
 
     int chain_count = static_cast<int>((point_count-1)*_L_chain);
     int flower_count = static_cast<int>((point_count-1)*_L_flower);
@@ -244,7 +254,7 @@ graph graph::tree(int point_count,Args... args){
 }
 
 template<typename... Args>
-graph graph::binary_tree(int point_count,Args... args){
+Graph Graph::binary_tree(int point_count,Args... args){
     if(point_count <=0)
         throw  std::invalid_argument("point_count must greater than 0!");
     
@@ -264,7 +274,7 @@ graph graph::binary_tree(int point_count,Args... args){
     std::set<unsigned int> can_left{1};
     std::set<unsigned int> can_right{1};
 
-    graph __tg(point_count,true); //
+    Graph __tg(point_count,true); //
     for(int i=2;i<=point_count;++i){
         double edge_pos = RND.random();
         //left
@@ -288,6 +298,44 @@ graph graph::binary_tree(int point_count,Args... args){
         can_right.insert(i);
     }
     return __tg;
+}
+
+template<typename... Args>
+Graph Graph::graph(int point_count,int edge_count,Args... args){
+    if(point_count <=0)
+        throw  std::invalid_argument("point_count must greater than 0!");
+    
+    auto __args_tuple = std::make_tuple(std::forward<Args>(args)...);
+
+    bool _L_directed = __pick_or_default<directedType>(__args_tuple,false);
+    bool _L_self_loop = __pick_or_default<self_loopType>(__args_tuple,true);
+    bool _L_repeated_edges = __pick_or_default<repeated_edgesType>(__args_tuple,true);
+    std::pair<int, int> _L_weight_limit
+        = __pick_or_default<weight_limitType>(__args_tuple,std::make_pair(1,1));
+
+    Graph __tg(point_count,_L_directed);
+    std::map<std::pair<int, int>,bool> used_edges;
+
+    int i = 0;
+    while ( i < edge_count ) {
+        int u = RND(1,point_count);
+        int v = RND(1,point_count);
+
+        if ( ( !_L_self_loop && u == v)  
+                || ( !_L_repeated_edges  && used_edges[std::make_pair(u, v)] == 1) )
+            continue;
+
+        __tg.add_edge(u, v,RND(_L_weight_limit.first,_L_weight_limit.second));
+
+        if( !_L_repeated_edges){
+            used_edges[std::make_pair(u, v)] = 1;
+            if( !_L_directed )
+                used_edges[std::make_pair(v, u)] = 1;
+        }
+        ++i;
+    }
+    return __tg;
+
 }
 
 } //namespace cyaron 
