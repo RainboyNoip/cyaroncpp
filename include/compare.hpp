@@ -1,7 +1,6 @@
 #ifndef ___CYARON_SINGLE_HPP__
 #include "base.hpp"
-#include "traits.hpp"
-#include "random.hpp"
+#include "io.hpp"
 #endif
 
 
@@ -81,6 +80,21 @@ bool noipstyle_check(
 }
 
 MAKE__NamedType(stdo, std::string)
+
+//可以使用 stdo = io 
+template<>
+template<>
+stdoType stdoType::argument::operator=<IO&>(IO& io) const {
+    return stdoType(io.get_output_name());
+}
+
+// stdoType = NamedType<.....>
+//struct newTTT :public stdoType::argument {
+    //template<>
+    //NamedType<std::string,struct __stdoTag> operator=<IO>(IO const & io) const {
+            //return NamedType<std::string,struct __stdoTag>(io.get_output_name());
+    //}
+//};
 
 struct Compare {
     template<typename... T,

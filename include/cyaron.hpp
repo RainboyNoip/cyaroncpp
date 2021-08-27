@@ -1,0 +1,1 @@
+#define ___CYARON_SINGLE_HPP__

@@ -1,15 +1,8 @@
 /* Author:Rainboy */
+#ifndef ___CYARON_SINGLE_HPP__
+#include "base.hpp"
 #pragma once
-
-#include <string>
-#include <iostream>
-#include <fstream>
-#include <string>
-#include <string_view>
-
-#include "traits.hpp"
-#include "exec.hpp"
-
+#endif
 
 
 namespace cyaron {
@@ -58,7 +51,7 @@ public:
     template<typename... Args>
     void output_writeln(Args&&... args){
         __write(output_IO,std::forward<Args>(args)...);
-        input_IO << std::endl;
+        output_IO << std::endl;
     }
 
     void output_gen(const std::string& exe_path ){
@@ -72,12 +65,17 @@ public:
         exec(__cmd.c_str(), __M_output_IO);
     }
 
+    std::string get_intput_name() const{
+        return __input_file_path;
+    }
+
+    std::string get_output_name() const{
+        return __output_file_path;
+    }
+
     virtual ~IO(){
         close_file();
     }
-
-
-//private:
 
     void close_file(){
         if(__input_file_path.length() != 0)
@@ -85,6 +83,9 @@ public:
         if(__output_file_path.length() != 0)
             __M_output_IO.close();
     }
+
+private:
+
 
     template<typename T>
     constexpr

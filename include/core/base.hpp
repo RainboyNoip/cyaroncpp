@@ -4,6 +4,7 @@
 * time: 2021年 08月 23日 星期一 22:24:02 CST
 *----------------*/
 
+#pragma once
 #include <string>
 #include <iostream>
 #include <tuple>
@@ -12,7 +13,10 @@
 #include <set>
 #include <map>
 #include <sstream>
+#include <string_view>
 
+#include "traits.hpp"
+#include "exec.hpp"
 
 namespace cyaron {
 //https://stackoverflow.com/a/41171291
@@ -75,6 +79,9 @@ public:
 private:
     T value_;
 };
+
+#define MAKE__NamedType__only(__name__,__type__) \
+using __name__##Type = NamedType<__type__, struct __##__name__##Tag>;
 
 #define MAKE__NamedType(__name__,__type__) \
 using __name__##Type = NamedType<__type__, struct __##__name__##Tag>;\
