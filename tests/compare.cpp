@@ -3,8 +3,10 @@
 int main(){
     using namespace cyaron;
     Compare::output(
-            stdo="hellp",
-            "out1",std::string("23123")
+            stdo="../tests/out1",
+            "../tests/out2",
+            "../tests/out3",
+            "../tests/out4"
             );
     return 0;
 }

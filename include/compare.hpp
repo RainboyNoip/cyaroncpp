@@ -13,8 +13,7 @@ const char LF = '\n';
 struct Reader {
     Reader() = delete;
     Reader(const char * file_name)
-        :fs(file_name)
-    {};
+    { fs.open(file_name);}
     virtual ~Reader(){ fs.close(); }
         //当前是否到了eof
     bool eof(){ return cur == EOF; }
@@ -38,7 +37,7 @@ struct Reader {
         return __ret;
     }
 private:
-    char cur; //当前的char
+    char cur{-2}; //当前的char
     std::ifstream fs;
 
     //读取下一个字符
@@ -66,7 +65,7 @@ bool noipstyle_check(
         }
     };
 
-    Reader ouf(std_output_path.c_str());
+    Reader ouf(user_output_path.c_str());
     Reader ans(std_output_path.c_str());
     int n=0;
     while ( !ans.eof() ) {
@@ -97,7 +96,13 @@ struct Compare {
 
         std::vector<std::string> __args{std::forward<T>(args)...};
         for (const auto& e : __args) {
-            std::cout << e << std::endl;
+            //std::cout << e << std::endl;
+            //TODO check file exists
+            auto __ret = noipstyle_check(
+                    e.c_str(),
+                    __t.get().c_str()
+                    );
+            std::cout << e << " " << (__ret ? "Right.\n" : "Wrong.\n");
         }
         //for (const auto& e : __outs) {
             //std::cout << e << std::endl;
