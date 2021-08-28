@@ -18,7 +18,7 @@ struct Random {
         return unif(engine);
     }
 
-    int operator()(){ return dis(engine); }
+    long long operator()(){ return dis(engine); }
     //template<typename U> //产生一定范围内的随机数
     long long  operator()(long long l,long long r){ return l == r ? l : dis(engine) % ( r-l+1 ) + l; }
 
