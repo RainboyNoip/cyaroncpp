@@ -9,7 +9,7 @@
 在终端下粘贴下面的命令，运行
 
 ```bash
-sh -c "$(curl -fsSL https://ghproxy.com/https://github.com/https://github.com/RainboyNoip/cyaroncpp/blob/master/install.sh)"
+sh -c "$(curl -fsSL https://ghproxy.com/https://github.com/RainboyNoip/cyaroncpp/blob/master/install.sh)"
 ```
 
 
