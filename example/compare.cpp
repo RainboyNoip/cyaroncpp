@@ -1,6 +1,4 @@
-#include "io.hpp"
-#include "compare.hpp"
-
+#include <cyaroncpp/cyaron.hpp>
 
 int main(){
     using namespace cyaron;

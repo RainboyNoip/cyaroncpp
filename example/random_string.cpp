@@ -1,18 +1,7 @@
-#include "random_string.hpp"
+#include <cyaroncpp/cyaron.hpp>
 
 int main(){
-
-    //{
-        //using namespace cyaron;
-        //auto t = ( word_length_range = {100,123} );
-        //std::cout << t.get().first << std::endl;
-        //std::cout << t.get().second << std::endl;
-    //}
-    //cyaron::String::random_sentence(cyaron::sentence_terminators = "hello");
-    //std::cout <<cyaron::String::random_sentence(int(5)) ;
-    //std::cout << "=====" << std::endl;
-    auto t = 
-    cyaron::String::random_sentence(10,20,
+    auto t = cyaron::String::random_sentence(10,20,
             cyaron::sentence_terminators   = "[!.]",
             cyaron::first_letter_uppercase = false,
             cyaron::word_separators        = " ",
@@ -21,8 +10,7 @@ int main(){
             );
     std::cout << t << std::endl;
 
-    t = 
-    cyaron::String::random_sentence(10,20,
+    t = cyaron::String::random_sentence(10,20,
             cyaron::sentence_terminators   = "!",
             cyaron::first_letter_uppercase = true,
             cyaron::word_separators        = " ,-",

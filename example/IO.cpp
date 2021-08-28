@@ -1,6 +1,5 @@
-#include "io.hpp"
+#include <cyaroncpp/cyaron.hpp>
 #include <array>
-
 
 int main(){
     cyaron::IO io;
