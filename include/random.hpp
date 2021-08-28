@@ -1,6 +1,7 @@
+#ifndef ___CYARON_SINGLE_HPP__
 #pragma once
-
 #include <random>
+#endif
 
 namespace cyaron {
 

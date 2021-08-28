@@ -1,7 +1,8 @@
+#ifndef ___CYARON_SINGLE_HPP__
 #pragma once
-
 #include <type_traits>
 #include <fstream>
+#endif
 
 namespace cyaron {
 

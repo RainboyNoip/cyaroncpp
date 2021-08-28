@@ -1,9 +1,10 @@
+#ifndef ___CYARON_SINGLE_HPP__
 #pragma once
-
 #include <iostream>
 #include <stdexcept>
 #include <stdio.h>
 #include <string>
+#endif
 
 namespace cyaron {
 
