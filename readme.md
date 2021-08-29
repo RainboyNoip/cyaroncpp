@@ -28,7 +28,7 @@ int main(){
 }
 ```
 
-编译：cyaron使用了c++17标签，是`noilinux 2.0`支持的最高标准，编译命令如下
+编译：cyaron使用了c++17标准，是`noilinux 2.0`支持的最高标准，编译命令如下
 
 ```bash
 g++ -std=c++17 -o helloword helloword.cpp
