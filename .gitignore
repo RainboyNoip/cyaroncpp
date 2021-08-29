@@ -31,7 +31,9 @@
 *.out
 *.app
 build/
-unittest/*.in
-unittest/*.out
+unittest/**/*.in
+unittest/**/*.out
 unittest/std
+unittest/test
+
 

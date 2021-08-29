@@ -222,7 +222,7 @@ struct Random {
         return unif(engine);
     }
 
-    int operator()(){ return dis(engine); }
+    long long operator()(){ return dis(engine); }
     //template<typename U> //产生一定范围内的随机数
     long long  operator()(long long l,long long r){ return l == r ? l : dis(engine) % ( r-l+1 ) + l; }
 
@@ -405,8 +405,10 @@ struct String {
 
 /* Author:Rainboy */
 #ifndef ___CYARON_SINGLE_HPP__
-#include "base.hpp"
 #pragma once
+#include "base.hpp"
+#include "traits.hpp"
+#include "exec.hpp"
 #endif
 
 
@@ -425,6 +427,7 @@ public:
         __input_file_path{__in},__output_file_path{__out}
     {}
 
+
     /**
     * 构造函数
     *
@@ -434,7 +437,11 @@ public:
     *
     */
     IO(const std::string & __file_prefix,int id = 1,const std::string& input_suffix= ".in",const std::string& output_suffix = ".out")
-        :IO(__file_prefix + "id"+input_suffix,__file_prefix + "id"+output_suffix)
+        :IO(__file_prefix + std::to_string(id)+input_suffix,
+                __file_prefix + std::to_string(id)+output_suffix)
+    {}
+
+    IO(int id) :IO("data",id)
     {}
 
     template<typename... Args>
@@ -469,6 +476,18 @@ public:
         auto __cmd = exe_path + " < " + __input_file_path;
         exec(__cmd.c_str(), __M_output_IO);
     }
+
+    template<typename T>
+    friend IO& operator<<(IO& __io,T&& __t) {
+        __io.input_IO << __t;
+        return __io;
+    }
+
+    //template<typename T>
+    //friend IO& operator<<(IO& __io,T&& __t) {
+        //__io.output_IO << __t;
+        //return __io;
+    //}
 
     std::string get_intput_name() const{
         return __input_file_path;
@@ -832,6 +851,9 @@ public:
     template<typename... Args>
     static Graph graph_connected(int point_count,int edge_count,Args... args);
     // static end
+    //
+    void set_with_head(bool with = false){ _M_with_head = with; }
+    void set_with_weight(bool with = false){_M_with_weight = with;}
 
 private:
     auto __next_edges_idx(unsigned int edges_idx) const
@@ -966,7 +988,7 @@ Graph Graph::graph(int point_count,int edge_count,Args... args){
     bool _L_self_loop = __pick_or_default<self_loopType>(__args_tuple,true);
     bool _L_repeated_edges = __pick_or_default<repeated_edgesType>(__args_tuple,true);
     std::pair<int, int> _L_weight_limit
-        = __pick_or_default<weight_limitType>(__args_tuple,std::make_pair(1,1));
+        = __pick_or_default<weight_limitType>(__args_tuple,std::make_pair(3,8));
 
     Graph __tg(point_count,_L_directed);
     std::map<std::pair<int, int>,bool> used_edges;

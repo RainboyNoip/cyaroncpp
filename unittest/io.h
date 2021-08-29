@@ -11,7 +11,7 @@ void test_io(){
     IO io1;
     std::vector<std::string> files;
     for(int i=1;i<=10;++i){
-        IO io(i);
+        IO io("./data/data",i);
         io.input_writeln(i);
         io << i << '\n';
         //io >> i >> '\n';
