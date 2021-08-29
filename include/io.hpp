@@ -1,7 +1,9 @@
 /* Author:Rainboy */
 #ifndef ___CYARON_SINGLE_HPP__
-#include "base.hpp"
 #pragma once
+#include "base.hpp"
+#include "traits.hpp"
+#include "exec.hpp"
 #endif
 
 
@@ -20,6 +22,7 @@ public:
         __input_file_path{__in},__output_file_path{__out}
     {}
 
+
     /**
     * 构造函数
     *
@@ -29,7 +32,11 @@ public:
     *
     */
     IO(const std::string & __file_prefix,int id = 1,const std::string& input_suffix= ".in",const std::string& output_suffix = ".out")
-        :IO(__file_prefix + "id"+input_suffix,__file_prefix + "id"+output_suffix)
+        :IO(__file_prefix + std::to_string(id)+input_suffix,
+                __file_prefix + std::to_string(id)+output_suffix)
+    {}
+
+    IO(int id) :IO("data",id)
     {}
 
     template<typename... Args>
@@ -64,6 +71,18 @@ public:
         auto __cmd = exe_path + " < " + __input_file_path;
         exec(__cmd.c_str(), __M_output_IO);
     }
+
+    template<typename T>
+    friend IO& operator<<(IO& __io,T&& __t) {
+        __io.input_IO << __t;
+        return __io;
+    }
+
+    //template<typename T>
+    //friend IO& operator<<(IO& __io,T&& __t) {
+        //__io.output_IO << __t;
+        //return __io;
+    //}
 
     std::string get_intput_name() const{
         return __input_file_path;

@@ -177,6 +177,9 @@ public:
     template<typename... Args>
     static Graph graph_connected(int point_count,int edge_count,Args... args);
     // static end
+    //
+    void set_with_head(bool with = false){ _M_with_head = with; }
+    void set_with_weight(bool with = false){_M_with_weight = with;}
 
 private:
     auto __next_edges_idx(unsigned int edges_idx) const
@@ -311,7 +314,7 @@ Graph Graph::graph(int point_count,int edge_count,Args... args){
     bool _L_self_loop = __pick_or_default<self_loopType>(__args_tuple,true);
     bool _L_repeated_edges = __pick_or_default<repeated_edgesType>(__args_tuple,true);
     std::pair<int, int> _L_weight_limit
-        = __pick_or_default<weight_limitType>(__args_tuple,std::make_pair(1,1));
+        = __pick_or_default<weight_limitType>(__args_tuple,std::make_pair(3,8));
 
     Graph __tg(point_count,_L_directed);
     std::map<std::pair<int, int>,bool> used_edges;
