@@ -4,6 +4,7 @@
 #endif
 
 
+
 namespace cyaron {
 
 const char CR = '\r';
@@ -88,6 +89,16 @@ stdoType stdoType::argument::operator=<IO&>(IO& io) const {
     return stdoType(io.get_output_name());
 }
 
+MAKE__NamedType(input, std::string)
+template<>
+template<>
+inputType inputType::argument::operator=<IO&>(IO& io) const {
+    return inputType(io.get_intput_name());
+}
+
+MAKE__NamedType(std_program, std::string)
+
+
 // stdoType = NamedType<.....>
 //struct newTTT :public stdoType::argument {
     //template<>
@@ -98,17 +109,19 @@ stdoType stdoType::argument::operator=<IO&>(IO& io) const {
 
 struct Compare {
     template<typename... T,
+        //限制T的类型是都是字符串
         std::enable_if_t<
             std::conjunction_v< __has_type<T, const char *,std::string>...  >
             //std::conjunction_v< std::is_same<T, const char *>...  >
             , bool> = true
         >
-    static void output(
+    static bool output(
             stdoType&& __t,
             T... args
             ){
 
         std::vector<std::string> __args{std::forward<T>(args)...};
+        bool __ret_flag = 1;
         for (const auto& e : __args) {
             //std::cout << e << std::endl;
             //TODO check file exists
@@ -117,13 +130,57 @@ struct Compare {
                     __t.get().c_str()
                     );
             std::cout << e << " " << (__ret ? "Right.\n" : "Wrong.\n");
+            if( __ret_flag and not __ret) //只有全部的__ret 为true 时，__ret_flag
+                __ret_flag = 0;
         }
-        //for (const auto& e : __outs) {
-            //std::cout << e << std::endl;
-        //}
 
-        //std::string _L_stdo = __pick_or_default<stdoType>(__args_tuple,"out");
-        //__args_tuple
+        return __ret_flag;
+    }
+
+
+    // input
+    // stdo
+    // std_program
+    template<typename... Args>
+    static void program(Args&&... args){
+        std::vector<std::string> __args{};
+
+        auto __args_tuple = std::make_tuple(std::forward<Args>(args)...);
+        std::string _L_stdo        = __pick_or_default<stdoType>(__args_tuple,"out");
+        std::string _L_input       = __pick_or_default<inputType>(__args_tuple,"in");
+        std::string _L_std_program = __pick_or_default<std_programType>(__args_tuple,"");
+        std::cout << _L_stdo << std::endl;
+        std::cout << _L_input << std::endl;
+        std::cout << _L_std_program << std::endl;
+
+        //进行输出
+        if( _L_std_program.length() not_eq 0){
+            //TODO check input exists
+            // cout some info about this scop code
+            if( std::filesystem::path(_L_std_program).is_relative() )
+                _L_std_program = std::filesystem::absolute(_L_std_program);
+            std::string command = _L_std_program + " < " + _L_input  + " > " + _L_stdo;
+            std::cout << "执行命令 : " << command << std::endl;
+            exec(command.c_str(),std::cout);
+        }
+
+        __pick_string_vec(__args,std::forward<Args>(args)...);
+
+        if( __args.size() == 0){
+            throw std::invalid_argument("必须提供用户的程序用于对拍！");
+        }
+
+        for (const auto& e : __args) {
+            std::string user_exe;
+            if( std::filesystem::path(e).is_relative() )
+                user_exe = std::filesystem::absolute(e);
+            std::string user_out = e +".out";
+            std::string command = user_exe + " < " + _L_input  + " > "  + user_out;
+            std::cout << "执行命令 : " << command << std::endl;
+            exec(command.c_str(),std::cout);
+            
+            output(stdo = _L_stdo, user_out.c_str());
+        }
 
     }
 

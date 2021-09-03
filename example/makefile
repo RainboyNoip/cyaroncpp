@@ -1,5 +1,5 @@
 CXX=g++
-CFLAGS=
+CFLAGS= -D LOCALTEST -I../include -I../include/core -g
 
 SRC=$(wildcard *.cpp)
 TARGET=$(patsubst %.cpp,%,$(SRC))

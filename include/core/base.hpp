@@ -1,4 +1,5 @@
 #pragma once
+#include <filesystem>
 #include <string>
 #include <iostream>
 #include <tuple>
@@ -11,6 +12,7 @@
 #include <fstream>
 #include <string_view>
 #include <type_traits>
+#include <traits.hpp>
 
 
 namespace cyaron {
@@ -134,6 +136,17 @@ auto __pick_or_default(
         //return std::forward<__RetType>(default_Ret_Value);
 //}
 
+
+template<typename T,typename... Args>
+void __pick_string_vec(std::vector<std::string>& vs,T&& __t,Args&&... args){
+    if constexpr ( std::disjunction_v< __has_type<T, const char *,std::string>,is_const_char_array<T>  >)
+        vs.push_back(std::forward<T>(__t));
+    if constexpr ( sizeof...(args) == 0)
+        return;
+    else
+        __pick_string_vec(vs,std::forward<Args>(args)...);
+
+}
 
 
 } //namespace cyaron

@@ -1,4 +1,9 @@
+#ifndef LOCALTEST
 #include <cyaroncpp/cyaron.hpp>
+#else
+#include "random_string.hpp"
+#endif
+
 #include <string>
 #include <iostream>
 

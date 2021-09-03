@@ -1,4 +1,8 @@
+#ifndef LOCALTEST
 #include <cyaroncpp/cyaron.hpp>
+#else
+#include "compare.hpp"
+#endif
 
 int main(){
     using namespace cyaron;

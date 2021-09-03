@@ -1,4 +1,8 @@
+#ifndef LOCALTEST
 #include <cyaroncpp/cyaron.hpp>
+#else
+#include "io.hpp"
+#endif
 #include <array>
 
 int main(){

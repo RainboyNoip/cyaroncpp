@@ -1,4 +1,8 @@
+#ifndef LOCALTEST
 #include <cyaroncpp/cyaron.hpp>
+#else
+#include "graph.hpp"
+#endif
 
 
 int main(){
