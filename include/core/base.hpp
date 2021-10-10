@@ -14,6 +14,7 @@
 #include <string_view>
 #include <type_traits>
 #include <chrono>
+#include <variant>
 #include "traits.hpp"
 
 

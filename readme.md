@@ -228,8 +228,55 @@ Compare::output(std=std_io,"1.out", "2.out" )
 
 ```
 
-Compare::program
+```c++
+// 对拍 一个a+b问
+// 编译出 std1.cpp std2.cpp
+// 不停的用第三个参数的lambda 来生成数据
+// 对生成的数据 用 std1 std2 来产生out文件
+// 对拍100次，不一样就停止
+// 默认生成的数据在compare文件夹下
+// 生成的数据名为 in
+// std1 生成的数据名为 user_out
+// std2 生成的数据名为 std_out
+Compare::program("std1.cpp","std2.cpp",
+    [](cyaron::IO& rndio){ //生成数据的lambda，接收的参数必须是IO &
+        rndio.input_writeln(cyaron::RND(1,10),cyaron::RND(1,10));
+    },
+100);
 
-- 对拍1000次/-1/
-- 对拍直到出错
- 
+void func(cyaron::IO& rndio){
+    rndio.input_writeln(cyaron::RND(1,10),cyaron::RND(1,10));
+}
+
+//也可以使用普通函数，但函数的参数一定要对
+Compare::program("std1.cpp","std2.cpp",func,100);
+
+//在test123下生成数据
+Compare::program("std1.cpp","std2.cpp",func,100,"test123");
+
+//每个生成的数据为一个单独的文件
+// in1 in2 in3....
+// usr_out1 usr_out2 usr_out3 ...
+// std_out1 std_out2 std_out3 ...
+Compare::program<false>("std1.cpp","std2.cpp",func,100,"test123");
+
+//使用rnd.cpp这个代码来生成数据,rnd.cpp的写法见下面
+Compare::program("std1.cpp","std2.cpp","rnd.cpp",100);
+
+```
+
+rnd.cpp
+
+```c++
+#include <iostrea>
+#include <cyaroncpp/cyaron.hpp>
+
+int main(){
+    int a = cyaron::RND(1,100);
+    int b = cyaron::RND(1,100);
+    //输出数据
+    std::cout << a <<" "<< b << std::endl; 
+    return 0;
+}
+```
+

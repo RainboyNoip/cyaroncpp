@@ -1,7 +1,8 @@
 #ifndef LOCALTEST
 #include <cyaroncpp/cyaron.hpp>
 #else
-#include "compare.hpp"
+#include "../include/random.hpp"
+#include "../include/compare.hpp"
 #endif
 
 int main(){
@@ -27,12 +28,15 @@ int main(){
  *            );
  */
     std::cout << "============ Compare.program =====" << std::endl;
-    Compare::program(
-            "1.exe","2.exe","3.exe",
-            stdo = "1.out",
-            input = "1.in",
-            std_program = "hello world"
-            );
+    Compare::program<true>("std.cpp","std2.cpp",[](cyaron::IO& io){
+            int a = RND(1,100);
+            int b = RND(1,100);
+            //std::cout << a <<" "<< b << std::endl;
+            io.input_writeln(a,b);
+            },100,"test_1");
+
+    Compare::program<false>("std.cpp","std2.cpp","rnd.cpp",100,"test_2");
+
     //fgogog("123123");
     return 0;
 }
