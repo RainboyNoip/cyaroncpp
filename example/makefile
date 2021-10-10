@@ -1,14 +1,15 @@
 CXX=g++
-CFLAGS= -D LOCALTEST -I../include -I../include/core -g
+#CFLAGS= -D LOCALTEST -I../include -I../include/core -g
+CFLAGS= -g -std=c++17
 
 SRC=$(wildcard *.cpp)
-TARGET=$(patsubst %.cpp,%,$(SRC))
+TARGET=$(patsubst %.cpp,%.out,$(SRC))
 
 all: $(TARGET)
 	@echo done
 
-% : %.cpp
-	$(CXX) $(CFLAGS) -o $@.out $<
+%.out : %.cpp
+	$(CXX) $(CFLAGS) -o $@ $<
 
 clean:
 	rm -rf $(TARGET)

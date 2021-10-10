@@ -1,9 +1,9 @@
-/* Author:Rainboy */
+#pragma once
 #ifndef ___CYARON_SINGLE_HPP__
 #pragma once
-#include "base.hpp"
-#include "traits.hpp"
-#include "exec.hpp"
+#include "core/base.hpp"
+#include "core/traits.hpp"
+#include "core/exec.hpp"
 #endif
 
 

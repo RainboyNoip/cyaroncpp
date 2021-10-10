@@ -1,6 +1,7 @@
 #!/bin/sh
-
 #install
-#sh -c "$(curl -fsSL https://ghproxy.com/https://github.com/RainboyNoip/cyaroncpp/blob/master/install.sh)"
-sudo curl -o /usr/include/cyaroncpp/cyaron.hpp --create-dirs https://ghproxy.com/https://github.com/RainboyNoip/cyaroncpp/blob/master/cyaron.hpp
+sudo rm -rf /usr/include/cyaroncpp/
+sudo mkdir -p /usr/include/cyaroncpp/
+sudo cp -r ./include /usr/include/cyaroncpp/
+sudo cp -r ./cyaron.hpp /usr/include/cyaroncpp/
 sudo chmod -R 755 /usr/include/cyaroncpp/

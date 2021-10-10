@@ -1,5 +1,6 @@
 #pragma once
 #include <filesystem>
+#include <thread>
 #include <string>
 #include <iostream>
 #include <tuple>
@@ -12,7 +13,26 @@
 #include <fstream>
 #include <string_view>
 #include <type_traits>
-#include <traits.hpp>
+#include <chrono>
+#include "traits.hpp"
+
+
+namespace cyaron { //utils
+
+template <typename I> 
+std::string n2hexstr(I w, size_t hex_len = sizeof(I)<<1) {
+    static const char* digits = "0123456789ABCDEF";
+    std::string rc(hex_len,'0');
+    for (size_t i=0, j=(hex_len-1)*4 ; i<hex_len; ++i,j-=4)
+        rc[i] = digits[(w>>j) & 0x0f];
+    return rc;
+}
+
+std::string simple_uuid(){
+    return n2hexstr( std::chrono::system_clock::now().time_since_epoch().count() );
+}
+
+} //namespace cyaron utils
 
 
 namespace cyaron {
@@ -147,6 +167,7 @@ void __pick_string_vec(std::vector<std::string>& vs,T&& __t,Args&&... args){
         __pick_string_vec(vs,std::forward<Args>(args)...);
 
 }
+
 
 
 } //namespace cyaron

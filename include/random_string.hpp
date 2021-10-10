@@ -1,11 +1,11 @@
+#pragma once
 #ifndef ___CYARON_SINGLE_HPP__
-#include "base.hpp"
-#include "traits.hpp"
+#include "./core/base.hpp"
+#include "./core/traits.hpp"
 #include "random.hpp"
 #endif
 
 namespace cyaron {
-
 
 
 //using  Sentence_terminators= NamedType<std::string_view, struct __sentence_terminators>;

@@ -1,5 +1,5 @@
-#ifndef ___CYARON_SINGLE_HPP__
 #pragma once
+#ifndef ___CYARON_SINGLE_HPP__
 #include <random>
 #endif
 

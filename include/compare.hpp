@@ -1,5 +1,6 @@
+#pragma once
 #ifndef ___CYARON_SINGLE_HPP__
-#include "base.hpp"
+#include "core/base.hpp"
 #include "io.hpp"
 #endif
 
@@ -137,10 +138,16 @@ struct Compare {
         return __ret_flag;
     }
 
+    // TODO 给多线程Compare::program 使用
+    struct for_compare_program_multiThread {
+        //a _exit_ = 0
+    };
+
 
     // input
     // stdo
     // std_program
+    // TODO 对线程对白
     template<typename... Args>
     static void program(Args&&... args){
         std::vector<std::string> __args{};
@@ -181,6 +188,7 @@ struct Compare {
             
             output(stdo = _L_stdo, user_out.c_str());
         }
+
 
     }
 

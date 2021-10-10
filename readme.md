@@ -4,12 +4,14 @@
 
 注意：代码只在linux下测试过，windows不知道能不能使用。
 
-## 安装
+## 安装/更新
 
 在终端下粘贴下面的命令，运行
 
 ```bash
-sh -c "$(curl -fsSL https://ghproxy.com/https://github.com/RainboyNoip/cyaroncpp/blob/master/install.sh)"
+git clone https://github.com/RainboyNoip/cyaroncpp/
+cd cyaroncpp
+sudo ./install.sh
 ```
 
 ## hello world
@@ -224,6 +226,10 @@ std_io.output_writeln(1, 2, 3) // 往std_io的output里写入一些东西
 // 以std_io这个IO对象中的output为标准，对拍1.out和2.out，
 Compare::output(std=std_io,"1.out", "2.out" )
 
-TODO Compare::program
 ```
 
+Compare::program
+
+- 对拍1000次/-1/
+- 对拍直到出错
+ 
