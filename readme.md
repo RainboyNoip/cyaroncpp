@@ -268,7 +268,7 @@ Compare::program("std1.cpp","std2.cpp","rnd.cpp",100);
 rnd.cpp
 
 ```c++
-#include <iostrea>
+#include <iostream>
 #include <cyaroncpp/cyaron.hpp>
 
 int main(){
