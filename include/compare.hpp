@@ -161,12 +161,16 @@ struct Compare {
         std::string STD_EXE ( std::filesystem::absolute( std::filesystem::path(std_exe).stem() ) );
         if( std::filesystem::path(usr_exe).extension() == ".cpp"){
             //compile
-            if( not compile(usr_exe) )
+            if( not compile(usr_exe) ){
+                std::cerr << "编译"<< usr_exe <<" 失败！" << std::endl;
                 return;
+            }
         }
         if( std::filesystem::path(std_exe).extension() == ".cpp"){
-            if( not compile(std_exe) )
+            if( not compile(std_exe) ){
+                std::cerr << "编译"<< std_exe <<" 失败！" << std::endl;
                 return;
+            }
         }
         //判断是否是rnd_func
         rnd_func_type rnd_func;
@@ -178,9 +182,10 @@ struct Compare {
         }
         else {  //是一cpp文件名，或可执行文件
             auto rnd_path = std::filesystem::path(std::get<std::string_view>(rnd));
-            std::string RND_EXE ( rnd_path.stem() );
+            std::string RND_EXE ( std::filesystem::absolute( rnd_path.stem() ) );
             if( rnd_path.extension() == ".cpp" && not compile(rnd_path.c_str()) ){
-                    return;
+                std::cerr << "编译"<< rnd_path <<" 失败！" << std::endl;
+                return;
             }
             rnd_func = [RND_EXE](IO& rndio){
                 rndio.close_file();
