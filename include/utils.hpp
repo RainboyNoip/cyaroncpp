@@ -30,7 +30,7 @@ bool compile(std::string_view code_path){
     dbg_one(code_path);
     if constexpr (type == cpp){
         std::stringstream ss;
-        ss << "g++ -g -o ";
+        ss << "g++ -std=c++17 -g -o ";
         ss << std::filesystem::path(code_path).stem() << " ";
         ss << code_path;
         std::stringstream sout;
