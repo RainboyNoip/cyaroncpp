@@ -37,3 +37,6 @@ unittest/std
 unittest/test
 
 
+example/test_*
+example/rnd
+example/std*

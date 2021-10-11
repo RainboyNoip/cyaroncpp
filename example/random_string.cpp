@@ -1,4 +1,9 @@
+#ifndef LOCALTEST
 #include <cyaroncpp/cyaron.hpp>
+#else
+#include "../include/random.hpp"
+#include "../include/random_string.hpp"
+#endif
 
 int main(){
     auto t = cyaron::String::random_sentence(10,20,

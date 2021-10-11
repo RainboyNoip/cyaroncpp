@@ -157,8 +157,8 @@ struct Compare {
             std::size_t cnt=1000,       //比较次数
             std::filesystem::path compare_path = "compare" //比较的目录
             ){
-        std::string USR_EXE ( std::filesystem::path(usr_exe).stem() );
-        std::string STD_EXE ( std::filesystem::path(std_exe).stem() );
+        std::string USR_EXE ( std::filesystem::absolute( std::filesystem::path(usr_exe).stem() ) );
+        std::string STD_EXE ( std::filesystem::absolute( std::filesystem::path(std_exe).stem() ) );
         if( std::filesystem::path(usr_exe).extension() == ".cpp"){
             //compile
             if( not compile(usr_exe) )
@@ -218,6 +218,7 @@ struct Compare {
             ss << rndio.get_intput_name() << " > ";
             ss << __usr_out;
             try {
+                //dbg_one(ss.str());
                 exec(ss.str().c_str(),sout);
             }
             catch(...) { std::cout << "运行 "<< USR_EXE << " 出错.";return;}
@@ -227,6 +228,7 @@ struct Compare {
             ss << rndio.get_intput_name() << " > ";
             ss << __std_out;
             try {
+                //dbg_one(ss.str());
                 exec(ss.str().c_str(),sout);
             }
             catch(...) { std::cout << "运行 "<< STD_EXE << " 出错.";return;}
