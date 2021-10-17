@@ -169,8 +169,7 @@ struct Compare {
         if( std::filesystem::path(std_exe).extension() == ".cpp"){
             if( not compile(std_exe) ){
                 std::cerr << "编译"<< std_exe <<" 失败！" << std::endl;
-                return;
-            }
+                return; }
         }
         //判断是否是rnd_func
         rnd_func_type rnd_func;
@@ -251,11 +250,11 @@ struct Compare {
     // stdo
     // std_program
     // TODO 对线程对拍
-    static void program(std::string_view usr_exe,
-            std::string_view std_exe,
-            std::string_view rnd_exe,
-            std::size_t cnt=1000
-            ){
+    //static void program(std::string_view usr_exe,
+            //std::string_view std_exe,
+            //std::string_view rnd_exe,
+            //std::size_t cnt=1000
+            //){
         //std::vector<std::string> __args{};
 
         //auto __args_tuple = std::make_tuple(std::forward<Args>(args)...);
@@ -295,7 +294,7 @@ struct Compare {
             //output(stdo = _L_stdo, user_out.c_str());
         //}
 
-    }
+    //}
 
 };
 
