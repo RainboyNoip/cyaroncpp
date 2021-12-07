@@ -1,3 +1,9 @@
+# cyaroncpp
+
+<p align="center">
+<img src="https://opencollective.com/polybar/tiers/badge.svg">
+</p>
+
 ## 目的
 
 [luogu-dev/cyaron](https://github.com/luogu-dev/cyaron)的cpp实现
