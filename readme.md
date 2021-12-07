@@ -1,7 +1,7 @@
 # cyaroncpp
 
 <p align="center">
-<img src="https://img.shields.io/badge/version-0.1-brightgreen?style=for-the-badge&logo=cplusplus">
+<img src="https://img.shields.io/badge/version-0.0.1-brightgreen?style=for-the-badge&logo=cplusplus">
 </p>
 
 ## 目的
