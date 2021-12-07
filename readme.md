@@ -99,7 +99,7 @@ String::random_sentence(5);
 // 使用" ,_"之一分隔单词，每个单词的长度在[3,6]之间
 // 每个单词从 "abcde" 中挑选
 // 句子的结尾字符为 [!.] 中的随机一个
-String::random_sentence( 3,8
+String::random_sentence( 3,8,
     sentence_terminators   = ".!", //名字结尾
     first_letter_uppercase = false, //首字母不大写
     word_separators        = " ,-", //单词间隔
@@ -225,12 +225,12 @@ io.output_gen("./std");
 ```c++
 // 默认比较器为NOIP风格，忽略最后空行和行尾空格
 // 以std.out为标准，对比1.out和2.out的正确性
-Compare::output(std="std.out","1.out","2.out");
+Compare::output(stdo="std.out","1.out","2.out");
 
 IO std_io(1);
 std_io.output_writeln(1, 2, 3) // 往std_io的output里写入一些东西
 // 以std_io这个IO对象中的output为标准，对拍1.out和2.out，
-Compare::output(std=std_io,"1.out", "2.out" )
+Compare::output(stdo=std_io,"1.out", "2.out" )
 
 ```
 
